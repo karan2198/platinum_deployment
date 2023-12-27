@@ -1,25 +1,24 @@
-// SignInComponent.js
-import React from 'react';
-import firebase from '../firebase'; // Path to your Firebase configuration file
 
-const SignInComponent = () => {
-  const signInWithGoogle= async () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
+
+import React from 'react';
+import { auth, googleProvider } from '../firebase';
+
+const SignInWithGoogle = () => {
+  const handleSignInWithGoogle = async () => {
     try {
-      await firebase.auth().signInWithPopup(provider);
-      // User signed in
+      const result = await auth.signInWithPopup(googleProvider);
+      const user = result.user;
+      console.log('Successfully signed in with Google:', user);
     } catch (error) {
-      // Handle error
-      console.error('Error signing in:', error);
+      console.error('Google Sign-In failed:', error);
     }
   };
 
   return (
-    <div>
-      <h2>Sign In</h2>
-      <button onClick={signInWithGoogle}>Sign in with Google</button>
-    </div>
+    <button onClick={handleSignInWithGoogle}>
+      Sign in with Google
+    </button>
   );
 };
 
-export default SignInComponent;
+export default SignInWithGoogle;

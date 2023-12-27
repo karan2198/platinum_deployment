@@ -1,4 +1,5 @@
 "use client"
+import { AuthContextProvider } from '@/firebaseAuth/AuthContext';
 import axios from 'axios';
 import { createContext, useContext, useState,useEffect } from 'react';
 
@@ -56,8 +57,10 @@ export function DataContextProvider({ children }) {
   }, []);
 
   return (
+    <AuthContextProvider>
     <DataContext.Provider value={{ sharedData, updateSharedData,defaultData}}>
       {children}
     </DataContext.Provider>
+    </AuthContextProvider>
   );
 }

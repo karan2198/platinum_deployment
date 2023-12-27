@@ -1,27 +1,21 @@
 // firebase.js
-import firebase from 'firebase/app';
-import 'firebase/auth'; // Make sure to import the auth module if you plan to use Firebase Authentication
-
+import { initializeApp } from 'firebase/app';
+import { getAuth} from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyApljDI64dVpozibgB65xRoVUAjVFsTUZU",
-  authDomain: "platinumcircle-d856b.firebaseapp.com",
-  projectId: "platinumcircle-d856b",
-  storageBucket: "platinumcircle-d856b.appspot.com",
-  messagingSenderId: "53471314129",
-  appId: "1:53471314129:web:e8fcc153e74c14b58645f0",
-  measurementId: "G-6GBP436G2C"
+  apiKey: "AIzaSyDwSC3-4HlQpTRvSQRSI_1kQ71AiDQ1J38",
+  authDomain: "platinum-9b0e5.firebaseapp.com",
+  projectId: "platinum-9b0e5",
+  storageBucket: "platinum-9b0e5.appspot.com",
+  messagingSenderId: "772278354549",
+  appId: "1:772278354549:web:de755d0b4f4537bbf76e3c",
+  measurementId: "G-7CBKKQ3MM3"
 };
 
 
 
 
-// Initialize Firebase
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
-export default firebase;
-
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 
 

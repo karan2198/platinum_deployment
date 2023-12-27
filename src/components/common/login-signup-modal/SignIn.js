@@ -2,16 +2,41 @@
 import Appbar from "@/components/googleauth/Appbar";
 import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
+import { UserAuth } from "@/firebaseAuth/AuthContext";
+import { useData } from "@/context/DataContext";
 
 const SignIn = () => {
   const router = useRouter();
+  const { user, googleSignIn } = UserAuth();
+  const { defaultData, updateSharedData } = useData();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-
   });
+  const [loading, setLoading] = useState(true);
+
+
+  const handleSignIn = async () => {
+    try {
+      await googleSignIn();
+
+      router.push('/dashboard-customer/dashboard-home');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      setLoading(false);
+    };
+    checkAuthentication();
+  }, [user]);
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,16 +49,16 @@ const SignIn = () => {
 
       const respData = await response.data;
 
-       // Check if the response indicates an error
-    if (respData.error) {
-      // Check if the error is due to invalid credentials
-      if (respData.error.code === 'INVALID_CREDENTIALS') {
-        alert("Invalid username or password. Please try again.");
-      } else {
-        alert("Login failed. Please try again later.");
+      // Check if the response indicates an error
+      if (respData.error) {
+        // Check if the error is due to invalid credentials
+        if (respData.error.code === 'INVALID_CREDENTIALS') {
+          alert("Invalid username or password. Please try again.");
+        } else {
+          alert("Login failed. Please try again later.");
+        }
+        return;
       }
-      return;
-    }
 
       localStorage.setItem("token", respData.data.token);
       localStorage.setItem("email", respData.data.email);
@@ -113,11 +138,24 @@ const SignIn = () => {
         <span className="hr_top_text">OR</span>
       </div>
 
+
       {/* <div className="d-grid mb10">
         <button className="ud-btn btn-white" type="button">
           <i className="fab fa-google" /> <Appbar/>
         </button>
       </div> */}
+      
+
+      <div className="singInWithGoogle">
+        <button onClick={handleSignIn} type="button" class="login-with-google-btn">
+          Sing in With Google
+        </button>
+      </div>
+
+      <div className="hr_content mb20">
+        <hr />
+        <span className="hr_top_text">OR</span>
+      </div>
 
       <p className="dark-color text-center mb0 mt10">
         Not signed up?{" "}
@@ -125,6 +163,9 @@ const SignIn = () => {
           Create an account.
         </Link>
       </p>
+
+      
+     
     </form>
   );
 };
