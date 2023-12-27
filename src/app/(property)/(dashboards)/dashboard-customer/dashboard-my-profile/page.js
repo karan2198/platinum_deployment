@@ -8,6 +8,7 @@ import ChangePasswordForm from "@/components/property/dashboard/dashboard-profil
 import PersonalInfo from "@/components/property/dashboard/dashboard-profile/PersonalInfo";
 import ProfileBox from "@/components/property/dashboard/dashboard-profile/ProfileBox";
 import SocialField from "@/components/property/dashboard/dashboard-profile/SocialField";
+import { auto } from "@popperjs/core";
 
 export const metadata = {
   title: "Dashboard My Profile || Platinum Circle - Real Estate Concierge Services",
@@ -20,7 +21,7 @@ const DashboardMyProfile = () => {
   return (
     <>
       {/* Main Header Nav */}
-      <div style={{zIndex:999,position:'relative'}}>
+      <div style={{zIndex:'auto',position:'relative'}}>
       <DashboardHeader />
       {/* End Main Header Nav */}
 

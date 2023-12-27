@@ -1,5 +1,6 @@
+"use client" ;
 
-
+import { useEffect } from "react";
 import DashboardHeader from "@/components/common/DashboardHeader";
 import MobileMenu from "@/components/common/mobile-menu";
 import DboardMobileNavigation from "@/components/property/dashboard/DboardMobileNavigation";
@@ -13,6 +14,10 @@ import Link from "next/link";
 
 
 const CustomerHome = () => {
+    useEffect(() => {
+        document.body.style.overflow = 'auto';    
+    }, []);
+
     const properties = [
         {
             Property: 'IRA Kollur',

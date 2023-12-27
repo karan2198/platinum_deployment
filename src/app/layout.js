@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
         {/* <Provider>
         <Appbar> */}
           <DataContextProvider>
-        <div className="wrapper ovh">{children}</div>
+        <div className="wrapper ovh" style={{position:'relative' , zIndex:'1'}}>{children}</div>
         </DataContextProvider>
         {/* </Appbar>
         </Provider> */}
