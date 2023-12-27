@@ -51,7 +51,7 @@ const ChangeContactNumber = () => {
                     Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    mobileNo: formData.newContact,
+                    phone: formData.newContact,
                 }),
             });
 
