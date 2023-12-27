@@ -12,8 +12,8 @@ const LoginSignupModal = ({setshowLoginDialog}) => {
           type="button"
           className="btn-close"
           onClick={()=>setshowLoginDialog(false)}
-          // data-bs-dismiss="modal"
-          // aria-label="Close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
         />
       </div>
       {/* End header */}
