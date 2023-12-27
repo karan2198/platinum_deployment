@@ -14,7 +14,58 @@ import { Content } from "next/font/google";
 import Link from "next/link";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-const ChangeEmail = () => {
+const ChangeContactNumber = () => {
+
+    const [formData, setFormData] = useState({
+        email: '',
+        oldContact: "",
+        newContact: "",
+        confirmNewContact: "",
+    });
+
+
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (formData.confirmNewContact !== formData.newContact) {
+            return alert("Confirm contact does not match");
+        }
+
+        const token = localStorage.getItem('token')
+        const emailuser = localStorage.getItem('email')
+        //  console.log(token)
+        try {
+            const response = await fetch("https://platinum.techpranee.com/client/api/v1/user/update-profile", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    mobileNo: formData.newContact,
+                }),
+            });
+
+            if (response.ok) {
+                alert("Contact changed successfully!");
+            } else {
+                alert("Failed to change Contact");
+            }
+        } catch (error) {
+            alert("Error occurred: " + error.message);
+        }
+
+
+    };
 
     return (
         <>
@@ -45,22 +96,22 @@ const ChangeEmail = () => {
                                 <h2 style={{ color: 'rgb(0, 45, 98)', paddingLeft: '50px', paddingBottom: '30px' }}>Set New Contact Details</h2>
 
                                 <div className="innerContant" style={{ display: 'flex', flexDirection: 'column', width: '70vw', height: '750px', backgroundColor: 'white', borderRadius: '10px', paddingBottom: '30px', alignContent: 'flex-start', paddingLeft: '60px', paddingTop: '40px', paddingRight: '20px', paddingBottom: '20px' }}>
-                                    <form style={{paddingTop:'16%'}}>
-                                        <div style={{ marginBottom: '20px', display:'flex',flexDirection:'row',alignItems:'center',paddingBottom:'10px' }}>
-                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px',paddingRight:'5%' }}>Old Contact Number :</label>
-                                            <input type="contact" style={{paddingLeft:'5px', width:'300px' , borderRadius:'10px',height:'40px',borderColor:'inherit'}}/>
+                                    <form style={{ paddingTop: '16%' }} onSubmit={handleSubmit}>
+                                        <div style={{ marginBottom: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', paddingBottom: '10px' }}>
+                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px', paddingRight: '5%' }}>Old Contact Number :</label>
+                                            <input type="contact" name="oldContact" value={formData.oldContact} onChange={handleChange} required style={{ paddingLeft: '5px', width: '300px', borderRadius: '10px', height: '40px', borderColor: 'inherit' }} />
                                         </div>
 
-                                        <div style={{ marginBottom: '20px',display:'flex',flexDirection:'row',alignItems:'center' ,paddingBottom:'10px'}}> 
-                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px',paddingRight:'4.2%' }}>New Contact Number :</label>
-                                            <input type="contact"  style={{paddingLeft:'5px', width:'300px', borderRadius:'10px',height:'40px',borderColor:'inherit'}}/>
+                                        <div style={{ marginBottom: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', paddingBottom: '10px' }}>
+                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px', paddingRight: '4.2%' }}>New Contact Number :</label>
+                                            <input type="contact" name="newContact" value={formData.newContact} onChange={handleChange} required style={{ paddingLeft: '5px', width: '300px', borderRadius: '10px', height: '40px', borderColor: 'inherit' }} />
                                         </div>
 
                                         <div style={{ marginBottom: '20px' }}>
-                                            <input type="contact" placeholder="Retype New Contact Number"  style={{paddingLeft:'5px', width:'300px', borderRadius:'10px',height:'40px',borderColor:'inherit',marginLeft:'23.5%'}} />
+                                            <input type="contact" name="confirmNewContact" value={formData.confirmNewContact} onChange={handleChange} required placeholder="Retype New Contact Number" style={{ paddingLeft: '5px', width: '300px', borderRadius: '10px', height: '40px', borderColor: 'inherit', marginLeft: '23.5%' }} />
                                         </div>
 
-                                        <button type="submit" style={{ fontSize: '22px', color: '#002D62', marginTop: '20px', backgroundColor: '#C0C0C0', borderRadius: '10px', border: 'none', width: '10vw', paddingTop: '7px', paddingBottom: '7px',marginLeft:'23.5%' }}>Confirm</button>
+                                        <button type="submit" style={{ fontSize: '22px', color: '#002D62', marginTop: '20px', backgroundColor: '#C0C0C0', borderRadius: '10px', border: 'none', width: '10vw', paddingTop: '7px', paddingBottom: '7px', marginLeft: '23.5%' }}>Confirm</button>
                                     </form>
 
                                 </div>
@@ -113,4 +164,4 @@ const ChangeEmail = () => {
     )
 }
 
-export default ChangeEmail;
+export default ChangeContactNumber;

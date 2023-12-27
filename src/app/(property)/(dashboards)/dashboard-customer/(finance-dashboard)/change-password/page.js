@@ -14,7 +14,56 @@ import { Content } from "next/font/google";
 import Link from "next/link";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-const ChangeEmail = () => {
+const ChangePassword = () => {
+
+    const [formData, setFormData] = useState({
+        email: '',
+        oldPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
+    });
+
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (formData.confirmNewPassword !== formData.newPassword) {
+            return alert("Confirm Password does not match");
+        }
+
+        const token = localStorage.getItem('token')
+        const emailuser = localStorage.getItem('email')
+        //  console.log(token)
+        try {
+            const response = await fetch("https://platinum.techpranee.com/client/auth/change-password", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    email: emailuser,
+                    oldPassword: formData.oldPassword,
+                    newPassword: formData.newPassword,
+                }),
+            });
+
+            if (response.ok) {
+                alert("Password changed successfully!");
+            } else {
+                alert("Failed to change password");
+            }
+        } catch (error) {
+            alert("Error occurred: " + error.message);
+        }
+    };
+
 
     return (
         <>
@@ -45,23 +94,31 @@ const ChangeEmail = () => {
                                 <h2 style={{ color: 'rgb(0, 45, 98)', paddingLeft: '50px', paddingBottom: '30px' }}>Set New Password</h2>
 
                                 <div className="innerContant" style={{ display: 'flex', flexDirection: 'column', width: '70vw', height: '750px', backgroundColor: 'white', borderRadius: '10px', paddingBottom: '30px', alignContent: 'flex-start', paddingLeft: '60px', paddingTop: '40px', paddingRight: '20px', paddingBottom: '20px' }}>
-                                    <form style={{paddingTop:'16%'}}>
-                                        <div style={{ marginBottom: '20px',display:'flex',flexDirection:'row',alignItems:'center',paddingBottom:'10px'  }}>
-                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px',paddingRight:'5%' }}>Old Password :</label>
-                                            <input type="password" placeholder="xyz" style={{paddingLeft:'5px', width:'300px' , borderRadius:'10px',height:'40px',borderColor:'inherit'}}/>
+                                    <form style={{ paddingTop: '16%' }} onSubmit={handleSubmit}>
+                                        <div style={{ marginBottom: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', paddingBottom: '10px' }}>
+                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px', paddingRight: '5%' }}>Old Password :</label>
+                                            <input type="password" placeholder="xyz" name="oldPassword" value={formData.oldPassword}
+                                                onChange={handleChange}
+                                                required style={{ paddingLeft: '5px', width: '300px', borderRadius: '10px', height: '40px', borderColor: 'inherit' }} />
                                         </div>
 
-                                        <div style={{ marginBottom: '20px',display:'flex',flexDirection:'row',alignItems:'center' ,paddingBottom:'10px' }}>
-                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px',paddingRight:'4.2%' }}>New Password :</label>
-                                            <input type="password" placeholder="xyz" style={{paddingLeft:'5px', width:'300px' , borderRadius:'10px',height:'40px',borderColor:'inherit'}}/>
+                                        <div style={{ marginBottom: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', paddingBottom: '10px' }}>
+                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px', paddingRight: '4.2%' }}>New Password :</label>
+                                            <input type="password" placeholder="xyz" name="newPassword"
+                                                value={formData.newPassword}
+                                                onChange={handleChange}
+                                                required style={{ paddingLeft: '5px', width: '300px', borderRadius: '10px', height: '40px', borderColor: 'inherit' }} />
                                         </div>
 
                                         <div style={{ marginBottom: '20px' }}>
-                                            
-                                            <input type="password" placeholder="Retype New Password" style={{paddingLeft:'5px', width:'300px', borderRadius:'10px',height:'40px',borderColor:'inherit',marginLeft:'18.1%'}}/>
+
+                                            <input type="password" placeholder="Retype New Password" name="confirmNewPassword"
+                                                value={formData.confirmNewPassword}
+                                                onChange={handleChange}
+                                                required style={{ paddingLeft: '5px', width: '300px', borderRadius: '10px', height: '40px', borderColor: 'inherit', marginLeft: '18.1%' }} />
                                         </div>
 
-                                        <button type="submit" style={{ fontSize: '22px', color: '#002D62', marginTop: '20px', backgroundColor: '#C0C0C0', borderRadius: '10px', border: 'none', width: '10vw', paddingTop: '7px', paddingBottom: '7px' ,marginLeft:'18.1%'}}>Confirm</button>
+                                        <button type="submit" style={{ fontSize: '22px', color: '#002D62', marginTop: '20px', backgroundColor: '#C0C0C0', borderRadius: '10px', border: 'none', width: '10vw', paddingTop: '7px', paddingBottom: '7px', marginLeft: '18.1%' }}>Confirm</button>
                                     </form>
 
                                 </div>
@@ -114,4 +171,4 @@ const ChangeEmail = () => {
     )
 }
 
-export default ChangeEmail;
+export default ChangePassword;

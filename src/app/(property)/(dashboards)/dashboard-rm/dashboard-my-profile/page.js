@@ -30,7 +30,7 @@ const DashboardMyProfile = () => {
           {/* End .dashboard__sidebar */}
 
           <div className="dashboard__main pl0-md">
-            <div className="dashboard__content bgc-f7">
+            <div className="dashboard__content bgc-f7 ">
               <div className="row pb40">
                 <div className="col-lg-12">
                   <DboardMobileNavigation />
@@ -51,7 +51,7 @@ const DashboardMyProfile = () => {
 
               <div className="row">
                 <div className="col-xl-12">
-                  <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
+                  <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-auto position-relative">
                     <div className="col-xl-7">
                       {/* <ProfileBox /> */}
                     </div>
@@ -64,7 +64,7 @@ const DashboardMyProfile = () => {
                   </div>
                   {/* End .ps-widget */}
 
-                  <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-hidden position-relative">
+                  <div className="ps-widget bgc-white bdrs12 default-box-shadow2 p30 mb30 overflow-auto position-relative">
                     <h4 className="title fz17 mb30">Social Media</h4>
                     <SocialField />
                   </div>

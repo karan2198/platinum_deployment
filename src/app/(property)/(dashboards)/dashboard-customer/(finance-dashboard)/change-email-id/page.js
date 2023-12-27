@@ -16,6 +16,58 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const ChangeEmail = () => {
 
+    const [formData, setFormData] = useState({
+        email: '',
+        oldEmail: "",
+        newEmail: "",
+        confirmNewEmail: "",
+    });
+
+
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (formData.confirmNewEmail !== formData.newEmail) {
+            return alert("Confirm Email does not match");
+        }
+
+        const token = localStorage.getItem('token')
+        const emailuser = localStorage.getItem('email')
+        //  console.log(token)
+        try {
+            const response = await fetch("https://platinum.techpranee.com/client/api/v1/user/update-profile", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    email: formData.newEmail,
+                }),
+            });
+
+            if (response.ok) {
+                alert("Email changed successfully!");
+            } else {
+                alert("Failed to change email");
+            }
+        } catch (error) {
+            alert("Error occurred: " + error.message);
+        }
+
+
+    };
+
+
     return (
         <>
 
@@ -45,23 +97,24 @@ const ChangeEmail = () => {
                                 <h2 style={{ color: 'rgb(0, 45, 98)', paddingLeft: '50px', paddingBottom: '30px' }}>Set New Email Id</h2>
 
                                 <div className="innerContant" style={{ display: 'flex', flexDirection: 'column', width: '70vw', height: '750px', backgroundColor: 'white', borderRadius: '10px', paddingBottom: '30px', alignContent: 'flex-start', paddingLeft: '60px', paddingTop: '40px', paddingRight: '20px', paddingBottom: '20px' }}>
-                                    <form>
-                                        <div style={{ marginBottom: '20px' , display:'flex',flexDirection:'row',alignItems:'center',paddingBottom:'10px' }}>
-                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px' ,paddingRight:'5%'}}>Old Email :</label>
-                                            <input type="email" placeholder="xyz@xuz.com" style={{paddingLeft:'5px', width:'300px' , borderRadius:'10px',height:'40px',borderColor:'inherit'}}/>
+                                    <form onSubmit={handleSubmit}>
+                                        <div style={{ marginBottom: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', paddingBottom: '10px' }}>
+                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px', paddingRight: '5%' }}>Old Email :</label>
+                                            <input type="email" placeholder="xyz@xuz.com" name="oldEmail" value={formData.oldEmail} style={{ paddingLeft: '5px', width: '300px', borderRadius: '10px', height: '40px', borderColor: 'inherit' }} onChange={handleChange} required />
                                         </div>
 
-                                        <div style={{ marginBottom: '20px' ,display:'flex',flexDirection:'row',alignItems:'center' ,paddingBottom:'10px'}}>
-                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px' ,paddingRight:'4.2%'}}>New Email :</label>
-                                            <input type="email" placeholder="xyz@xuz.com" style={{paddingLeft:'5px', width:'300px', borderRadius:'10px',height:'40px',borderColor:'inherit'}} />
+                                        <div style={{ marginBottom: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', paddingBottom: '10px' }}>
+                                            <label style={{ fontSize: '18px', color: '#333', marginBottom: '8px', paddingRight: '4.2%' }}>New Email :</label>
+                                            <input type="email" placeholder="xyz@xuz.com" name="newEmail" value={formData.newEmail} style={{ paddingLeft: '5px', width: '300px', borderRadius: '10px', height: '40px', borderColor: 'inherit' }} onChange={handleChange} required />
                                         </div>
 
                                         <div style={{ marginBottom: '20px' }}>
-                        
-                                            <input type="email" placeholder="Retype New Email Id" style={{paddingLeft:'5px', width:'300px', borderRadius:'10px',height:'40px',borderColor:'inherit',marginLeft:'14.5%'}}/>
+
+                                            <input type="email" placeholder="Retype New Email Id" name="confirmNewEmail" value={formData.confirmNewEmail} style={{ paddingLeft: '5px', width: '300px', borderRadius: '10px', height: '40px', borderColor: 'inherit', marginLeft: '14.5%' }} onChange={handleChange} required />
                                         </div>
 
-                                        <button type="submit" style={{ fontSize: '22px', color: '#002D62', marginTop: '20px', backgroundColor: '#C0C0C0', borderRadius: '10px', border: 'none', width: '10vw', paddingTop: '7px', paddingBottom: '7px' ,marginLeft:'14.5%'}}>Confirm</button>
+
+                                        <button type="submit" style={{ fontSize: '22px', color: '#002D62', marginTop: '20px', backgroundColor: '#C0C0C0', borderRadius: '10px', border: 'none', width: '10vw', paddingTop: '7px', paddingBottom: '7px', marginLeft: '14.5%' }}>Confirm</button>
                                     </form>
 
                                 </div>
