@@ -10,7 +10,7 @@ const SignIn = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    
+
   });
 
   const handleSubmit = async (e) => {
@@ -21,21 +21,37 @@ const SignIn = () => {
         "https://platinum.techpranee.com/client/auth/login_without_2fa",
         formData
       );
-      const respData=await response.data;
-      localStorage.setItem("token",respData.data.token);
-      localStorage.setItem("email",respData.data.email);
+
+      const respData = await response.data;
+
+       // Check if the response indicates an error
+    if (respData.error) {
+      // Check if the error is due to invalid credentials
+      if (respData.error.code === 'INVALID_CREDENTIALS') {
+        alert("Invalid username or password. Please try again.");
+      } else {
+        alert("Login failed. Please try again later.");
+      }
+      return;
+    }
+
+      localStorage.setItem("token", respData.data.token);
+      localStorage.setItem("email", respData.data.email);
       router.push('/dashboard-customer/dashboard-home');
       console.log(respData)
-      setFormData({username: "",
-      password: ""})
+      setFormData({
+        username: "",
+        password: ""
+      })
 
-     
-      
+
+
       //console.log("Registration successful:", response.data);
 
     } catch (error) {
-      
+
       console.error("Registration failed:", error);
+
     }
   };
 
@@ -102,7 +118,7 @@ const SignIn = () => {
           <i className="fab fa-google" /> <Appbar/>
         </button>
       </div> */}
-     
+
       <p className="dark-color text-center mb0 mt10">
         Not signed up?{" "}
         <Link className="dark-color fw600" href="/register">
