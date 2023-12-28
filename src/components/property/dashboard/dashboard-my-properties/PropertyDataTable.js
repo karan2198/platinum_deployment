@@ -7,6 +7,7 @@ import UserChatBoxContent from "../dashboard-message/UserChatBoxContent";
 import Drawer from '@mui/material/Drawer';
 import ChatBoxForm from "../dashboard-message/ChatBoxForm"
 import { useData } from "@/context/DataContext";
+import { GoPlusCircle } from "react-icons/go";
 
 const propertyData = [
   {
@@ -184,20 +185,22 @@ const PropertyDataTable = () => {
             <td className="vam">{property.posted_on}</td>
             <td className="vam">
               <div className="d-flex">
-                <button
+                {/* <button
                   className="icon"
                   style={{ border: "none" }}
                   data-tooltip-id={`edit-${property.id}`}
                 >
                   <span className="fas fa-pen fa" />
-                </button>
-                <button
+                </button> */}
+                {/* <button
                   className="icon"
                   style={{ border: "none" }}
                   data-tooltip-id={`delete-${property.id}`}
                 >
                   <span className="flaticon-bin" />
-                </button>
+                </button> */}
+                
+                <GoPlusCircle style={{fontSize:'x-large'}}/>
 
                 <ReactTooltip
                   id={`edit-${property.id}`}
