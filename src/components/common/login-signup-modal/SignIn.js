@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { UserAuth } from "@/firebaseAuth/AuthContext";
 import { useData } from "@/context/DataContext";
+import GoogleButton from 'react-google-button'
 
 const SignIn = () => {
   const router = useRouter();
@@ -144,17 +145,18 @@ const SignIn = () => {
           <i className="fab fa-google" /> <Appbar/>
         </button>
       </div> */}
-      
+
 
       <div className="singInWithGoogle">
-        <button onClick={handleSignIn} type="button" class="login-with-google-btn">
-          Sing in With Google
-        </button>
+        <GoogleButton
+          type="light" // can be light or dark
+          onClick={handleChange} 
+          style={{display:'flex' , alignItems:'center',justifyContent:'center' , width:'100%'}}
+        />
       </div>
 
       <div className="hr_content mb20">
         <hr />
-        <span className="hr_top_text">OR</span>
       </div>
 
       <p className="dark-color text-center mb0 mt10">
@@ -164,8 +166,8 @@ const SignIn = () => {
         </Link>
       </p>
 
-      
-     
+
+
     </form>
   );
 };
