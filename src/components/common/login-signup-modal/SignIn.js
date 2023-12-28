@@ -150,7 +150,7 @@ const SignIn = () => {
       <div className="singInWithGoogle">
         <GoogleButton
           type="light" // can be light or dark
-          onClick={handleChange} 
+          onClick={handleSignIn} 
           style={{display:'flex' , alignItems:'center',justifyContent:'center' , width:'100%'}}
         />
       </div>
