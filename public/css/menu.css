@@ -683,6 +683,7 @@
 .mm-wrapper--opened,
 .mm-wrapper--opened body {
 	overflow: hidden;
+	background-color: white;
 }
 .mm-wrapper__blocker {
 	background: rgba(0, 0, 0, 0.4);

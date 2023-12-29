@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardHeader from "@/components/common/DashboardHeader";
 import MobileMenu from "@/components/common/mobile-menu";
 import DboardMobileNavigation from "@/components/property/dashboard/DboardMobileNavigation";
@@ -13,31 +13,84 @@ import { Directions, Style } from "@mui/icons-material";
 import { Content } from "next/font/google";
 import Link from "next/link";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import Async from 'react-select/async';
+
 
 const MyPlan = () => {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
+    const [subscriptionData, setSubscriptionData] = useState([]);
+    const [currentSubscription, setCurrentSubscription] = useState([]);
+    useEffect(() => {
+
+        const fetchData = async () => {
+            const token = localStorage.getItem('token');
+
+            try {
+                // Fetch subscription_type data
+                const response = await fetch('https://platinum.techpranee.com/client/api/v1/subscription_type/list', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                const res = await response.json();
+                if (res && res.status === 'SUCCESS') {
+                    setSubscriptionData(res.data.data);
+                } else {
+                    console.error('Error fetching subscription_type data:', res.message);
+                }
+
+                // Fetch subscription data
+                const responseSubscription = await fetch('https://platinum.techpranee.com/client/api/v1/subscription/list', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                const resData = await responseSubscription.json();
+                if (resData && resData.status === 'SUCCESS' && resData.data && resData.data.data.length > 0) {
+                    setCurrentSubscription(resData.data.data);
+                } else if (resData && resData.status === 'RECORD_NOT_FOUND') {
+                    setCurrentSubscription([]);
+                    console.error('No records found for subscription:', resData.message);
+                } else {
+                    console.error('Error fetching subscription data:', resData.message);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        // Call the fetchData function
+        fetchData();
+    }, []);
+
 
     const Styles = {
         dropdown1: {
             position: 'relative',
             display: 'inline-block',
-            paddingLeft:'100px'
+            paddingLeft: '100px'
         },
         dropdown2: {
             position: 'relative',
             display: 'inline-block',
-            paddingLeft:'30.5%'
+            paddingLeft: '30.5%'
         },
         dropbtn: {
             backgroundColor: 'rgb(0, 45, 98)',
             color: 'white',
-            paddingRight:'10px',
-            paddingLeft:'50px',
+            paddingRight: '10px',
+            paddingLeft: '50px',
             fontSize: '20px',
             border: 'none',
             cursor: 'pointer',
-            borderRadius:'10px',
+            borderRadius: '10px',
 
         },
         dropdownContent: {
@@ -96,7 +149,7 @@ const MyPlan = () => {
                 <div className="dashboard dashboard_wrapper pr30 pr0-xl" >
                     <SidebarDashboardCustomer />
                     <div className="dashboard__main pl0-md">
-                        <div className="dashboard__content bgc-f7" style={{paddingTop:'40px'}}>
+                        <div className="dashboard__content bgc-f7" style={{ paddingTop: '40px' }}>
                             <div className="row ">
                                 <div className="col-lg-12">
                                     <DboardMobileNavigation />
@@ -105,34 +158,46 @@ const MyPlan = () => {
                             </div>
 
 
-                            <div style={{ display: 'flex', flexDirection: 'column' ,marginTop:'100px' }}>
-                                <h2 style={{color:'rgb(0, 45, 98)', paddingLeft:'50px', paddingBottom:'30px'}}>My Plan</h2>
+                            <div style={{ display: 'flex', flexDirection: 'column', marginTop: '100px' }}>
+                                <h2 style={{ color: 'rgb(0, 45, 98)', paddingLeft: '50px', paddingBottom: '30px' }}>My Plan</h2>
 
-                                <div className="innerContant" style={{ display: 'flex', flexDirection: 'column', width: '70vw', height: '750px', backgroundColor: 'white', borderRadius: '10px', paddingBottom: '30px' ,alignContent:'flex-start', paddingLeft:'60px',paddingTop:'40px',paddingRight:'20px',paddingBottom:'20px'}}>
-                                    <div className="upper" style={{display: 'flex', flexDirection: 'column',  alignContent:'flex-start' , paddingBottom:'40px'}}>
+                                <div className="innerContant" style={{ display: 'flex', flexDirection: 'column', width: '70vw', height: '750px', backgroundColor: 'white', borderRadius: '10px', paddingBottom: '30px', alignContent: 'flex-start', paddingLeft: '60px', paddingTop: '40px', paddingRight: '20px', paddingBottom: '20px' }}>
+                                    <div className="upper" style={{ display: 'flex', flexDirection: 'column', alignContent: 'flex-start', paddingBottom: '40px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '30px' }}>
-                                            <h5 style={{color:'rgb(0, 45, 98)'}} >Plan Details</h5>
-                                            <h6 style={{ paddingLeft: '59%',color:'rgb(0, 45, 98)' }}>Status</h6>
+                                            <h5 style={{ color: 'rgb(0, 45, 98)' }} >Plan Details</h5>
+                                            <h6 style={{ paddingLeft: '59%', color: 'rgb(0, 45, 98)' }}>Status</h6>
                                         </div>
 
-                                        <div style={{ display: 'flex', flexDirection: 'column',paddingBottom:'15px'}}>
-                                            <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', alignItems: 'center'  }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: '15px' }}>
+                                            <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
                                                 <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                    <h5 style={{color:'rgb(0, 45, 98)'}}>Subscription Type :</h5>
-                                                    <h6 style={{ padding: '20px', color:'rgb(0, 45, 98)' , fontWeight:'600'}}>Monthly Subscription : Rs 2000/mounth</h6>
+                                                    <h5 style={{ color: 'rgb(0, 45, 98)' }}>Subscription Type :</h5>
+
+                                                    {currentSubscription.length > 0 ? (
+                                                        <h6 style={{ padding: '20px', color: 'rgb(0, 45, 98)', fontWeight: '600' }}>{currentSubscription[0].subscription_type} Subscription: Rs {currentSubscription[0].payment}/month</h6>
+                                                    ) : (
+                                                        <div style={{paddingLeft:'10px' , fontWeight:'600'}}>Record Not Found</div>
+                                                    )}
+
                                                 </div>
-                                                <div> 
-                                                    <h6 style={{ paddingLeft: '200px' , color:'rgb(0, 45, 98)' , fontWeight:'600'}}>Active( next renwal date 12-01-2024 )</h6>
+                                                <div>
+
+                                                    {currentSubscription.length > 0 ? (
+                                                        <h6 style={{ paddingLeft: '200px', color: 'rgb(0, 45, 98)', fontWeight: '600' }}>{currentSubscription[0].isActive ? `Active( next renewal date ${currentSubscription[0].valid_till} )` : 'Not Active'}</h6>
+                                                    ) : (
+                                                        <div style={{paddingLeft:'380px' , fontWeight:'600'}}>Record Not Found</div>
+                                                    )}
+
                                                 </div>
                                             </div>
 
-                                            <div style={{ borderTop: "2px solid rgb(192, 192, 192) ", marginLeft: '-15px', marginRight: 20 ,paddingBottom:'30px'}}></div>
+                                            <div style={{ borderTop: "2px solid rgb(192, 192, 192) ", marginLeft: '-15px', marginRight: 20, paddingBottom: '30px' }}></div>
 
                                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                    <h5 style={{color:'rgb(0, 45, 98)'}}>Services :</h5>
+                                                    <h5 style={{ color: 'rgb(0, 45, 98)' }}>Services :</h5>
                                                     <div class="dropdown1" style={Styles.dropdown1}>
-                                                        <button class="dropbtn" style={Styles.dropbtn} onClick={toggleDropdown}> {getButtonContent()}<ArrowDropDownIcon style={{paddingLeft:'10px',fontSize:'80px',height:'0.5em'}}/> </button>
+                                                        <button class="dropbtn" style={Styles.dropbtn} onClick={toggleDropdown}> {getButtonContent()}<ArrowDropDownIcon style={{ paddingLeft: '10px', fontSize: '80px', height: '0.5em' }} /> </button>
                                                         <div class="dropdownContent" style={Styles.dropdownContent}>
                                                             <a style={Styles.dropdownLink} href="#" onClick={() => handleOptionSelect('Option 1')}>Option 1</a>
                                                             <a style={Styles.dropdownLink} href="#" onClick={() => handleOptionSelect('Option 2')}>Option 2</a>
@@ -140,9 +205,9 @@ const MyPlan = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="dropdown2" style={Styles.dropdown2}>
-                                                    <button class="dropbtn" style={Styles.dropbtn} onClick={toggleDropdown}> {getButtonContent()}<ArrowDropDownIcon style={{paddingLeft:'10px',fontSize:'80px',height:'0.5em'}}/></button>
+                                                    <button class="dropbtn" style={Styles.dropbtn} onClick={toggleDropdown}> {getButtonContent()}<ArrowDropDownIcon style={{ paddingLeft: '10px', fontSize: '80px', height: '0.5em' }} /></button>
                                                     <div class="dropdownContent" style={Styles.dropdownContent}>
                                                         <a style={Styles.dropdownLink} href="#" onClick={() => handleOptionSelect('Option 1')}>Option 1</a>
                                                         <a style={Styles.dropdownLink} href="#" onClick={() => handleOptionSelect('Option 2')}>Option 2</a>
@@ -150,57 +215,77 @@ const MyPlan = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
 
-                                        <div style={{ borderTop: "2px solid rgb(192, 192, 192) ", marginLeft: '-15px', marginRight: 20}}></div>
+                                        <div style={{ borderTop: "2px solid rgb(192, 192, 192) ", marginLeft: '-15px', marginRight: 20 }}></div>
                                     </div>
-                                    <div className="middle" style={{paddingBottom:'40px'}}>
-                                        <div style={{paddingBottom:'30px'}}>
-                                            <button className="changePlan" style={{color:'rgb(0, 45, 98)' ,background:'rgb(192, 192, 192)', borderRadius:'10px', padding:'5px 60px' , border:'none', fontWeight:'bold'}}>Change Plan</button>
+                                    <div className="middle" style={{ paddingBottom: '40px' }}>
+                                        <div style={{ paddingBottom: '30px' }}>
+                                            <button className="changePlan" style={{ color: 'rgb(0, 45, 98)', background: 'rgb(192, 192, 192)', borderRadius: '10px', padding: '5px 60px', border: 'none', fontWeight: 'bold' }}>Change Plan</button>
                                         </div>
                                         <div>
-                                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', alignContent: 'center',paddingBottom:'20px' }}>
-                                                <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
-                                                    <h5 style={{color:'rgb(0, 45, 98)'  , fontWeight:'600'}}>Monthly Subscription :</h5>
-                                                    <h6 style={{ padding: '10px',color:'rgb(0, 45, 98)' , fontWeight:'600' }}>Rs 2000/mounth</h6>
+                                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', alignContent: 'center', paddingBottom: '20px' }}>
+
+                                                {subscriptionData.length > 0 ? (
+                                                    <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
+                                                        <h5 style={{ color: 'rgb(0, 45, 98)', fontWeight: '600' }}>Monthly Subscription :</h5>
+                                                        <h6 style={{ padding: '10px', color: 'rgb(0, 45, 98)', fontWeight: '600' }}>Rs {subscriptionData[0].price}/month</h6>
+                                                    </div>
+                                                ) : (
+                                                    <div>Loading subscription data...</div>
+                                                )}
+
+
+                                                <div style={{ paddingLeft: '134px' }}>
+                                                    <button className="select" style={{ color: 'rgb(0, 45, 98)', background: 'rgb(192, 192, 192)', padding: '3px 30px', borderRadius: '10px', border: 'none', fontWeight: 'bold' }} >Select</button>
                                                 </div>
-                                                <div style={{paddingLeft:'134px'}}>
-                                                <button className="select" style={{color:'rgb(0, 45, 98)', background:'rgb(192, 192, 192)' , padding:'3px 30px' , borderRadius:'10px' , border:'none', fontWeight:'bold'}} >Select</button>
-                                                </div>
-                                                <div style={{paddingLeft:'22%'}}>
-                                                <button className="submit" style={{color:'rgb(0, 45, 98)', background:'rgb(192, 192, 192)' , padding:'3px 30px' , borderRadius:'10px' , border:'none', fontWeight:'bold'}}>Submit</button>
+                                                <div style={{ paddingLeft: '22%' }}>
+                                                    <button className="submit" style={{ color: 'rgb(0, 45, 98)', background: 'rgb(192, 192, 192)', padding: '3px 30px', borderRadius: '10px', border: 'none', fontWeight: 'bold' }}>Submit</button>
                                                 </div>
                                             </div>
-                                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', alignContent: 'center', paddingBottom:'20px'}}>
-                                                <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
-                                                    <h5 style={{color:'rgb(0, 45, 98)' , fontWeight:'600'}}>Yearly Subscription :</h5>
-                                                    <h6 style={{ padding: '10px',color:'rgb(0, 45, 98)' , fontWeight:'600' }}>Rs 5000/mounth</h6>
+                                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', alignContent: 'center', paddingBottom: '20px' }}>
+
+                                                {subscriptionData.length > 0 ? (
+                                                    <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
+                                                        <h5 style={{ color: 'rgb(0, 45, 98)', fontWeight: '600' }}>Quarterly Subscription :</h5>
+                                                        <h6 style={{ padding: '10px', color: 'rgb(0, 45, 98)', fontWeight: '600' }}>Rs {subscriptionData[1].price}/month</h6>
+                                                    </div>
+                                                ) : (
+                                                    <div>Loading subscription data...</div>
+                                                )}
+
+                                                <div style={{ paddingLeft: '123px' }}>
+                                                    <button className="select" style={{ color: 'rgb(0, 45, 98)', background: 'rgb(192, 192, 192)', padding: '3px 30px', borderRadius: '10px', border: 'none', fontWeight: 'bold' }}>Select</button>
                                                 </div>
-                                                <div style={{paddingLeft:'150px'}}>
-                                                <button className="select" style={{color:'rgb(0, 45, 98)', background:'rgb(192, 192, 192)' , padding:'3px 30px' , borderRadius:'10px' , border:'none', fontWeight:'bold'}}>Select</button>
-                                                </div>
-                                                <div style={{paddingLeft:'22%'}}>
-                                                <button className="submit" style={{color:'rgb(0, 45, 98)', background:'rgb(192, 192, 192)' , padding:'3px 30px' , borderRadius:'10px' , border:'none',fontWeight:'bold'}}>Submit</button>
+                                                <div style={{ paddingLeft: '22%' }}>
+                                                    <button className="submit" style={{ color: 'rgb(0, 45, 98)', background: 'rgb(192, 192, 192)', padding: '3px 30px', borderRadius: '10px', border: 'none', fontWeight: 'bold' }}>Submit</button>
                                                 </div>
                                             </div>
                                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', alignContent: 'center' }}>
-                                                <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
-                                                    <h5 style={{color:'rgb(0, 45, 98)' , fontWeight:'600'}}>Yearly Subscription :</h5>
-                                                    <h6 style={{ padding: '10px' , color:'rgb(0, 45, 98)' , fontWeight:'600'}}>Rs 9000/mounth</h6>
+
+                                                {subscriptionData.length > 0 ? (
+                                                    <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
+                                                        <h5 style={{ color: 'rgb(0, 45, 98)', fontWeight: '600' }}>Yearly Subscription :</h5>
+                                                        <h6 style={{ padding: '10px', color: 'rgb(0, 45, 98)', fontWeight: '600' }}>Rs {subscriptionData[2].price}/month</h6>
+                                                    </div>
+                                                ) : (
+                                                    <div>Loading subscription data...</div>
+                                                )}
+
+
+                                                <div style={{ paddingLeft: '150px' }}>
+                                                    <button className="select" style={{ color: 'rgb(0, 45, 98)', background: 'rgb(192, 192, 192)', padding: '3px 30px', borderRadius: '10px', border: 'none', fontWeight: 'bold' }}>Select</button>
                                                 </div>
-                                                <div style={{paddingLeft:'150px'}}>
-                                                <button className="select" style={{color:'rgb(0, 45, 98)', background:'rgb(192, 192, 192)' , padding:'3px 30px' , borderRadius:'10px' , border:'none',fontWeight:'bold'}}>Select</button>
-                                                </div>
-                                                <div style={{paddingLeft:'22%'}}>
-                                                <button className="submit" style={{color:'rgb(0, 45, 98)', background:'rgb(192, 192, 192)' , padding:'3px 30px', borderRadius:'10px' , border:'none' , fontWeight:'bold'}}>Submit</button>
+                                                <div style={{ paddingLeft: '22%' }}>
+                                                    <button className="submit" style={{ color: 'rgb(0, 45, 98)', background: 'rgb(192, 192, 192)', padding: '3px 30px', borderRadius: '10px', border: 'none', fontWeight: 'bold' }}>Submit</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="last">
                                         <div>
-                                            <button className="payment" style={{color:'white' , background:'rgb(0, 45, 98)', borderRadius:'10px' , padding:'3px 90px', border:'none', fontWeight:'bolder'}}>Pay Now</button>
+                                            <button className="payment" style={{ color: 'white', background: 'rgb(0, 45, 98)', borderRadius: '10px', padding: '3px 90px', border: 'none', fontWeight: 'bolder' }}>Pay Now</button>
                                         </div>
                                     </div>
                                 </div>

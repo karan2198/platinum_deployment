@@ -1,4 +1,4 @@
-"use client" ;
+"use client";
 
 import { useEffect } from "react";
 import DashboardHeader from "@/components/common/DashboardHeader";
@@ -15,7 +15,15 @@ import Link from "next/link";
 
 const CustomerHome = () => {
     useEffect(() => {
-        document.body.style.overflow = 'auto';    
+        document.body.style.overflow = 'auto';
+      document.body.style.backgroundColor = 'white'
+      document.addEventListener('DOMContentLoaded', function() {
+        // Use a setTimeout to delay the background color change
+        setTimeout(function() {
+            document.body.style.backgroundColor = 'white';
+        }, 0);
+    });
+
     }, []);
 
     const properties = [
@@ -36,13 +44,13 @@ const CustomerHome = () => {
         },
     ];
 
-    
+
 
 
     return (
         <>
-        
-    
+
+
             {/* Main Header Nav */}
             <DashboardHeader />
             {/* End Main Header Nav */}
@@ -63,9 +71,9 @@ const CustomerHome = () => {
                                 </div>
 
                             </div>
-                        
-                            <h2 style={{  marginLeft: '20px ',marginTop:'15px' }}>Customer Details </h2>
-                        {/* <div style={{
+
+                            <h2 style={{ marginLeft: '20px ', marginTop: '15px' }}>Customer Details </h2>
+                            {/* <div style={{
                            
 
                         }}> */}
@@ -134,17 +142,17 @@ const CustomerHome = () => {
                                     </div>
                                 </div>
                             </div> */}
-                            <PropertyDataTable/>
-                       
+                            <PropertyDataTable />
 
-                       
+
+
                         </div>
-                        </div>
-                        </div>
-                        </div>
-                        {/* dashboard_content_wrapper */}
-                    </>
-                    );
+                    </div>
+                </div>
+            </div>
+            {/* dashboard_content_wrapper */}
+        </>
+    );
 };
 
-                    export default CustomerHome;
+export default CustomerHome;
