@@ -183,7 +183,7 @@ const MyPlan = () => {
                                                 <div>
 
                                                     {currentSubscription.length > 0 ? (
-                                                        <h6 style={{ paddingLeft: '200px', color: 'rgb(0, 45, 98)', fontWeight: '600' }}>{currentSubscription[0].isActive ? `Active( next renewal date ${currentSubscription[0].valid_till} )` : 'Not Active'}</h6>
+                                                        <h6 style={{ paddingLeft: '50px', color: 'rgb(0, 45, 98)', fontWeight: '600' }}>{currentSubscription[0].isActive ? `Active( next renewal date ${currentSubscription[0].valid_till} )` : 'Not Active'}</h6>
                                                     ) : (
                                                         <div style={{paddingLeft:'380px' , fontWeight:'600'}}>Record Not Found</div>
                                                     )}
@@ -199,9 +199,9 @@ const MyPlan = () => {
                                                     <div class="dropdown1" style={Styles.dropdown1}>
                                                         <button class="dropbtn" style={Styles.dropbtn} onClick={toggleDropdown}> {getButtonContent()}<ArrowDropDownIcon style={{ paddingLeft: '10px', fontSize: '80px', height: '0.5em' }} /> </button>
                                                         <div class="dropdownContent" style={Styles.dropdownContent}>
-                                                            <a style={Styles.dropdownLink} href="#" onClick={() => handleOptionSelect('Option 1')}>Option 1</a>
-                                                            <a style={Styles.dropdownLink} href="#" onClick={() => handleOptionSelect('Option 2')}>Option 2</a>
-                                                            <a style={Styles.dropdownLink} href="#" onClick={() => handleOptionSelect('Option 3')}>Option 3</a>
+                                                            <a style={Styles.dropdownLink} href="#" >Option 1</a>
+                                                            <a style={Styles.dropdownLink} href="#" >Option 2</a>
+                                                            <a style={Styles.dropdownLink} href="#" >Option 3</a>
                                                         </div>
                                                     </div>
                                                 </div>
